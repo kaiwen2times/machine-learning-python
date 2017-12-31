@@ -24,7 +24,7 @@ def gradientDescentMulti(Xdata, y, theta, alpha, num_iters):
     theta_temp = np.zeros(theta.shape[0])
 
     for iter in range(num_iters):
-        h = np.dot(Xdata, theta)
+        h = np.dot(Xdata, theta).reshape((-1,1))
         for i in range(theta.shape[0]):  
             theta_temp[i] = theta[i] - (alpha / n) * np.sum(np.multiply(h - y, Xdata[:,i].reshape((-1,1))))
 
