@@ -1,7 +1,7 @@
 import numpy as np
 from computeCost import computeCost
 
-def gradientDescentLinear(Xdata, y, theta, alpha, num_iters):
+def gradientDescentMulti(Xdata, y, theta, alpha, num_iters):
     
     # GRADIENTDESCENT Performs gradient descent to learn theta
     #   theta = GRADIENTDESENT(Xdata, y, theta, alpha, num_iters) updates theta by 
@@ -21,13 +21,14 @@ def gradientDescentLinear(Xdata, y, theta, alpha, num_iters):
     # Initialize some useful values
     n = y.shape[0]
     J_history = np.zeros(num_iters)
+    theta_temp = np.zeros(theta.shape[0])
 
     for iter in range(num_iters):
         h = np.dot(Xdata, theta)
-        theta0 = theta[0] - (alpha / n) * np.sum(h - y)
-        theta1 = theta[1] - (alpha / n) * np.sum(np.multiply(h - y, Xdata[:,1].reshape((-1,1))))
+        for i in range(theta.shape[0]):  
+            theta_temp[i] = theta[i] - (alpha / n) * np.sum(np.multiply(h - y, Xdata[:,i].reshape((-1,1))))
 
-        theta = np.array([theta0, theta1])
+        theta = np.copy(theta_temp)
 
         # save the cost J in every iteration    
         J_history[iter] = computeCost(Xdata, y, theta)

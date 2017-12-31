@@ -1,22 +1,21 @@
-function [X_norm, mu, sigma] = featureNormalize(X)
-%FEATURENORMALIZE Normalizes the features in X 
-%   FEATURENORMALIZE(X) returns a normalized version of X where
-%   the mean value of each feature is 0 and the standard deviation
-%   is 1. This is often a good preprocessing step to do when
-%   working with learning algorithms.
+import numpy as np
 
-% You need to set these values correctly
-X_norm = X;
-mu = zeros(1, size(X, 2));
-sigma = zeros(1, size(X, 2));
+def featureNormalize(X):
+    # FEATURENORMALIZE Normalizes the features in X 
+    #   FEATURENORMALIZE(X) returns a normalized version of X where
+    #   the mean value of each feature is 0 and the standard deviation
+    #   is 1. This is often a good preprocessing step to do when
+    #   working with learning algorithms.
 
-mu = mean(X);
-sigma = std(X);
+    # You need to set these values correctly
+    X_norm = X
+    mu = np.zeros((1,X.shape[1]))
+    sigma = np.zeros((1,X.shape[1]))
 
-for i=1:length(X)
-    X_norm(i,:) = (X(i,:)-mu)./sigma;
-end
+    mu = np.mean(X, axis=0)
+    sigma = np.std(X, axis=0)
 
-%X_norm = (X-mu)./sigma;
+    for i in range(X.shape[0]):
+        X_norm[i,:] = np.divide((X[i,:] - mu), sigma)
 
-end
+    return (X_norm, mu, sigma)
