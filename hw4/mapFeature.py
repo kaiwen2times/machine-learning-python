@@ -10,10 +10,11 @@ def mapFeature(X1, X2, degree):
     #   X1, X2, X1.^2, X2.^2, X1*X2, X1*X2.^2, etc..
     #
     #   Inputs X1, X2 must be the same size
-
-    output = np.ones(size(X1(:,1)))
-    for i = 1:degree
-        for j = 0:i
-            out(:, end+1) = (X1.^(i-j)).*(X2.^j)
+    
+    output = np.ones((X1.shape[0],1))
+    for i in range(1, degree+1):
+        for j in range(i+1):
+            temp = (X1.^(i-j)).*(X2.^j)
+            output = np.hstack() (X1.^(i-j)).*(X2.^j)
         
     return output
