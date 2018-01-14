@@ -43,9 +43,10 @@ def plotDecisionBoundary(theta, X, y, degree):
         # evaluate z = theta*x over the grid
         for i in range(0, len(u)):
             for j in range(0, len(v)):
-                z[i,j] = mapFeature(u[i], v[j], degree) * theta
+                model = mapFeature(u[i], v[j], degree)
+                z[i,j] = np.dot(model, theta)
             # end
         # end
 
         z = z.T
-        plt.contour(u, v, z, [0, 0], linewidth=2)
+        plt.contour(u, v, z, [0, 0])
