@@ -17,4 +17,4 @@ def gradientLogisticRegression(theta, X, y, lam):
     grad = (1 / n) * (np.dot(X.T, (sigmoid(h).reshape((-1,1)) - y)) + (theta.reshape((-1,1)) * lam) / n)
     grad[0] = (1 / n) * np.sum((sigmoid(h) - y) * X[:,0])
     
-    return grad
+    return grad.flatten()
