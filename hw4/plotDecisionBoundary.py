@@ -17,8 +17,8 @@ def plotDecisionBoundary(theta, X, y, degree):
     index0 = np.where(y==0)[0]
     index1 = np.where(y==1)[0]
     
-    plt.plot(X[index0,0], X[index0,1], 'ro')
-    plt.plot(X[index1,0], X[index1,1], 'g+')
+    plt.plot(X[index0,1], X[index0,2], 'ro')
+    plt.plot(X[index1,1], X[index1,2], 'g+')
 
     if X.shape[1] <= 3:
         # only need 2 points to define a line, so choose two endpoints
@@ -41,12 +41,12 @@ def plotDecisionBoundary(theta, X, y, degree):
         z = np.zeros((len(u),len(v)))
                      
         # evaluate z = theta*x over the grid
-        for i in range(0, len(u)):
-            for j in range(0, len(v)):
+        for i in range(len(u)):
+            for j in range(len(v)):
                 model = mapFeature(u[i], v[j], degree)
                 z[i,j] = np.dot(model, theta)
             # end
         # end
 
         z = z.T
-        plt.contour(u, v, z, [0, 0])
+        plt.contour(u, v, z, 0)

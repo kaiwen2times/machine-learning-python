@@ -14,6 +14,7 @@ def costFunctionLogisticRegression(theta, X, y, lam):
     h = np.dot(X, theta)
 
     # logistic Regression Cost Function
-    J = (-1 / n) * (np.dot(y.T, np.log(sigmoid(h))) + np.dot((1-y).T, np.log(1-sigmoid(h)))) + (lam / (2 * n)) * np.sum(theta[1:-1]**2)
+    J = (-1 / n) * (np.dot(y.T, np.log(sigmoid(h))) + np.dot((1-y).T, np.log(1-sigmoid(h)))) + \
+        (lam / (2 * n)) * np.sum(theta[1:-1]**2)
     
     return J
