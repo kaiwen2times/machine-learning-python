@@ -1,8 +1,10 @@
 import numpy as np
-import decisionStump from decisionStump
-import adaBoostError from adaBoostError
+from DecisionStump import DecisionStump
+from AdaBoostError import AdaBoostError
+from AdaBoostUpdateWeights import AdaBoostUpdateWeights
+from AdaBoostClassifier import AdaBoostClassifier
 
-def myAdaBoost(trainCV, trainGT, numFeatures, testCV, testGT)
+def AdaBoost(trainCV, trainGT, numFeatures, testCV, testGT):
     #  Implements the AdaBoost algorithm for decsion stump trees
     # Input:
     #   trainCV - the X values of input training samples, nxD
@@ -21,38 +23,40 @@ def myAdaBoost(trainCV, trainGT, numFeatures, testCV, testGT)
     # for every feature, find the best threshold
     nf = trainCV.shape[1]  # number of features, nf
     ns = trainCV.shape[0]  # number of samples, ns
-    nlist = np,arange(1, ns+1).T
+    claasifiers = {}
 
 
     # each sample gets a weight r
     weights = trainGT * 0 + (1 / ns)
 
-    for i in range(1, nf+1):
+    for i in range(0, nf):
         # each iteration creates a classifier
         h1 = decisionStump(weights, trainCV, trainGT)   # train base learner
         errorAmt, alpha = adaBoostError(weights, h1, trainCV, trainGT)  # determine alpha
-        h1.alpha = alpha;
-        [newWeights,zz] = AdaBoostUpdateWeights(weights,h1,TrainXdata,TrainGT);    %update the weights
-        h1.z = zz;                                                  %theoretical error bound
-        classifiers{i} = h1;
+        h1['alpha'] = alpha
+        newWeights, zz = AdaBoostUpdateWeights(weights, h1, trainCV, trainGT)
+        h1['z'] = zz
+        classifiers['h1'] = h1
 
-        %Document the performance
-        trainPred = AdaBoostClassifier(classifiers,TrainXdata);
-        trainErr(i)= sum(trainPred~=TrainGT)/n;
-        testPred = AdaBoostClassifier(classifiers,TestXdata);
-        testErr(i)= sum(testPred~=TestGT)/size(TestXdata,1);
-        if(i==1) errBound(i)= zz;
-        else errBound(i) = zz*errBound(i-1);
-        end
+        # document the performance
+        trainPred = AdaBoostClassifier(classifiers, trainCV)
+        trainErr[i]= np.sum(trainPred~=trainGT) / n
+        testPred = AdaBoostClassifier(classifiers, testCV)
+        testErr[i]= np.sum(testPred~=TestGT) / testCV.shape[0]
+        if(i == 0):
+            errBound[i]= zz
+        else:
+            errBound[i] = zz * errBound[i-1]
+        # end
 
-        weights = newWeights;
+        weights = newWeights
     # end
 
-    errors.train = trainErr;
-    errors.test = testErr;
-    errors.eb = errBound;
+    errors['train'] = trainErr
+    errors['test'] = testErr
+    errors['eb'] = errBound
 
-    pred.train = trainPred;
-    pred.test = testPred;
+    pred['train'] = trainPred
+    pred['test'] = testPred
 
     return classifiers, errors, pred
