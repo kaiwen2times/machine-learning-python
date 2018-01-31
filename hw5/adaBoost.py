@@ -23,16 +23,20 @@ def AdaBoost(trainCV, trainGT, numFeatures, testCV, testGT):
     # for every feature, find the best threshold
     nf = trainCV.shape[1]  # number of features, nf
     ns = trainCV.shape[0]  # number of samples, ns
-    claasifiers = {}
-
+    classifiers = {}
+    errors = {}
+    pred = {}
+    trainErr = np.zeros(nf)
+    testErr = np.zeros(nf)
+    errBound = np.zeros(nf)
 
     # each sample gets a weight r
     weights = trainGT * 0 + (1 / ns)
 
     for i in range(0, nf):
         # each iteration creates a classifier
-        h1 = decisionStump(weights, trainCV, trainGT)   # train base learner
-        errorAmt, alpha = adaBoostError(weights, h1, trainCV, trainGT)  # determine alpha
+        h1 = DecisionStump(weights, trainCV, trainGT)   # train base learner
+        errorAmt, alpha = AdaBoostError(weights, h1, trainCV, trainGT)  # determine alpha
         h1['alpha'] = alpha
         newWeights, zz = AdaBoostUpdateWeights(weights, h1, trainCV, trainGT)
         h1['z'] = zz
@@ -40,9 +44,9 @@ def AdaBoost(trainCV, trainGT, numFeatures, testCV, testGT):
 
         # document the performance
         trainPred = AdaBoostClassifier(classifiers, trainCV)
-        trainErr[i]= np.sum(trainPred~=trainGT) / n
+        trainErr[i] = np.sum((trainPred != trainGT).nonzero()) / ns
         testPred = AdaBoostClassifier(classifiers, testCV)
-        testErr[i]= np.sum(testPred~=TestGT) / testCV.shape[0]
+        testErr[i] = np.sum((trainPred != trainGT).nonzero()) / testCV.shape[0]
         if(i == 0):
             errBound[i]= zz
         else:
