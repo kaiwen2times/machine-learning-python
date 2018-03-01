@@ -1,7 +1,7 @@
 import numpy as np
 import pdb
 
-def AdaBoostError(weights, classifier,local_xdata, localGT):
+def AdaBoostError(weights, classifier, local_xdata, localGT):
     # function [errorAmt, alpha] = AdaBoostError(weights, classifier,localXdata, localGT)
     #  Compute AdaBoost Error across a set of training samples
     # Input:
