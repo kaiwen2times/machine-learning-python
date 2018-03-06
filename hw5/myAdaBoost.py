@@ -45,9 +45,9 @@ def MyAdaBoost(trainXdata, trainGT, testXdata, testGT):
 
         # document the performance
         trainPred = AdaBoostClassifier(classifiers, trainXdata)
-        trainErr[i]= np,sum( (trainPred != trainGT).all() ) / ns
+        trainErr[i]= np,sum( (trainPred != trainGT).nonzero() ) / ns
         testPred = AdaBoostClassifier(classifiers, testXdata)
-        testErr[i]= np.sum( (testPred != testGT).all() ) / ns
+        testErr[i]= np.sum( (testPred != testGT).nonzero() ) / ns
         if i == 0:
             errBound[i]= zz
         else:
