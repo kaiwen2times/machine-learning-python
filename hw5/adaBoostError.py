@@ -14,6 +14,7 @@ def AdaBoostError(weights, classifier, local_xdata, localGT):
     #   alpha- AdaBoost alpha value
     #   predict- prediction class [-1,+1] of each input sample
 
+
     # make a predition using the classifier on our data
     # predict = (2 * (Xdata(:,feature) < T) - 1) * polarity
     predict = (2 * (local_xdata(:,classifier['feature']) < classifier['thresh']) - 1) \
