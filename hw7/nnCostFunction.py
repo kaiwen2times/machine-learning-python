@@ -14,7 +14,7 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     #   The returned parameter grad should be a "unrolled" vector of the
     #   partial derivatives of the neural network.
 
-    # Reshape nn_params back into the parameters theta1 and theta2, the weight matrices
+    # Reshape nn_params back into the parameters theta1 and theta2
     # for our 2 hidden-layer neural network
     theta1 = nn_params['Theta1'] #25x401
     theta2 = nn_params['Theta2'] #10x26
@@ -34,11 +34,12 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     layer2 = np.concatenate((bias, layer1), axis=0)
     output = sigmoid(theta2.dot(layer2))
 
-    # reshape y to nn format
+    # reshape y to nn format, one hot encoding
     ynn = np.zeros((num_samples, num_labels))
     for i in range(num_samples):
-        ynn[i,y(i)] = 1
+        ynn[i, y[i]] = 1
     #end
     ynn = ynn.T
+
     return J
 #end
