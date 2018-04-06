@@ -43,6 +43,34 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     
     # cost function - first without regularization
     J = (-1 / num_samples) * np.sum(np.sum( ynn * np.log(output) + (1 - ynn) * np.log(1 - output) ))
+    pdb.set_trace()
+    # add regularization to cost function
+    sum_layer1 = np.sum(np.sum( theta1[:, 1:-1] **2 ))
+    sum_layer2 = np.sum(np.sum( theta2[:, 1:-1] **2 ))
+    reg = (lam / (2 * num_samples)) * (sum_layer1 + sum_layer2)
+    J = J + reg
+    
+    # backpropogation, calculation of gradients
+    for t in range(num_samples):
+        # step 1: forward propagate
+        a1 = X1[t, :]
+        z2 = Theta1.dot(a1.T)
+        a2 = sigmoid(z2)
+        z2 = np.insert(z2, 0, 1) # need to account for the bias
+        a2 = np.insert(a2, 0, 1) # need to account for the bias
+        z3 = Theta2.dot(a2.T)
+        a3 = sigmoid(z3)
+        
+        # step 2: compute error
+        delta3 = a3 - ynn[:, t]
+
+        # step 3: back propagate error through activation function
+        delta2 = (theta2.T.dot(delta3)) * (a2 * (1 - a2))
+
+        # step 4: update weights
+        Theta2_grad = Theta2_grad + deltaPart3 * a2';
+        Theta1_grad = Theta1_grad + deltaPart2(2:end) * a1;  	
+    # end
 
     return J
 #end
