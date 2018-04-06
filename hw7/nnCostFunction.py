@@ -37,7 +37,7 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     # reshape y to nn format, one hot encoding
     ynn = np.zeros((num_samples, num_labels))
     for i in range(num_samples):
-        ynn[i, y[i]] = 1
+        ynn[i, y[i] -1] = 1 # column #10 represents digit 0
     #end
     ynn = ynn.T
     
