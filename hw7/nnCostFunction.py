@@ -40,6 +40,9 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
         ynn[i, y[i]] = 1
     #end
     ynn = ynn.T
+    
+    # cost function - first without regularization
+    J = (-1 / num_samples) * np.sum(np.sum( ynn * np.log(output) + (1 - ynn) * np.log(1 - output) ))
 
     return J
 #end
