@@ -37,20 +37,18 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     # reshape y to nn format, one hot encoding
     ynn = np.zeros((num_samples, num_labels))
     for i in range(num_samples):
-        ynn[i, y[i] -1] = 1 # column #10 represents digit 0
+        ynn[i, y[i] -1] = 1 # column 10 represents digit 0
     #end
     ynn = ynn.T
     
     # cost function - first without regularization
     J = (-1 / num_samples) * np.sum(np.sum( ynn * np.log(output) + (1 - ynn) * np.log(1 - output) ))
-    print('cost without regularization: %2.4f'% J)
     
     # cost function - first with regularization
     sum_layer1 = np.sum(np.sum( theta1[:, 1:-1] **2 ))
     sum_layer2 = np.sum(np.sum( theta2[:, 1:-1] **2 ))
     reg = (lam / (2 * num_samples)) * (sum_layer1 + sum_layer2)
     J = J + reg
-    print('cost with regularization: %2.4f'% J)
         
     # backpropogation, calculation of gradients
     for t in range(num_samples):
@@ -78,10 +76,10 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     theta2_grad = theta2_grad / num_samples
     
     # regularization
-    theta1_tmp = theta1
+    theta1_tmp = np.copy(theta1)
     theta1_tmp[:, 0] = 0 # don't regularize bias terms
     theta1_grad = theta1_grad + lam * theta1_tmp / num_samples
-    theta2_tmp = theta2
+    theta2_tmp = np.copy(theta2)
     theta2_tmp[:, 0] = 0
     theta2_grad = theta2_grad + lam * theta2_tmp / num_samples
 
