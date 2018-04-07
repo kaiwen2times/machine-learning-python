@@ -19,8 +19,8 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     theta1 = nn_params['Theta1'] #25x401
     theta2 = nn_params['Theta2'] #10x26
     
-    num_samples = X.shape[0]
     J = 0
+    num_samples = X.shape[0]
     theta1_grad = np.zeros(theta1.shape)
     theta2_grad = np.zeros(theta2.shape)
 
@@ -43,22 +43,24 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     
     # cost function - first without regularization
     J = (-1 / num_samples) * np.sum(np.sum( ynn * np.log(output) + (1 - ynn) * np.log(1 - output) ))
-    pdb.set_trace()
-    # add regularization to cost function
+    print('cost without regularization: %2.4f'% J)
+    
+    # cost function - first with regularization
     sum_layer1 = np.sum(np.sum( theta1[:, 1:-1] **2 ))
     sum_layer2 = np.sum(np.sum( theta2[:, 1:-1] **2 ))
     reg = (lam / (2 * num_samples)) * (sum_layer1 + sum_layer2)
     J = J + reg
-    
+    print('cost with regularization: %2.4f'% J)
+        
     # backpropogation, calculation of gradients
     for t in range(num_samples):
         # step 1: forward propagate
         a1 = X1[t, :]
-        z2 = Theta1.dot(a1.T)
+        z2 = theta1.dot(a1.T)
         a2 = sigmoid(z2)
         z2 = np.insert(z2, 0, 1) # need to account for the bias
         a2 = np.insert(a2, 0, 1) # need to account for the bias
-        z3 = Theta2.dot(a2.T)
+        z3 = theta2.dot(a2.T)
         a3 = sigmoid(z3)
         
         # step 2: compute error
@@ -66,11 +68,27 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
 
         # step 3: back propagate error through activation function
         delta2 = (theta2.T.dot(delta3)) * (a2 * (1 - a2))
-
         # step 4: update weights
-        Theta2_grad = Theta2_grad + deltaPart3 * a2';
-        Theta1_grad = Theta1_grad + deltaPart2(2:end) * a1;  	
+        theta2_grad = theta2_grad + np.outer(delta3, a2)
+        theta1_grad = theta1_grad + np.outer(delta2[1:], a1)
     # end
 
-    return J
+    # step 5: average gradient update
+    theta1_grad = theta1_grad / num_samples
+    theta2_grad = theta2_grad / num_samples
+    
+    # regularization
+    theta1_tmp = theta1
+    theta1_tmp[:, 0] = 0 # don't regularize bias terms
+    theta1_grad = theta1_grad + lam * theta1_tmp / num_samples
+    theta2_tmp = theta2
+    theta2_tmp[:, 0] = 0
+    theta2_grad = theta2_grad + lam * theta2_tmp / num_samples
+
+    # unroll gradients
+    theta1_flat = theta1_grad.flatten()
+    theta2_flat = theta1_grad.flatten()
+    grad = np.concatenate((theta1_flat, theta2_flat))
+
+    return J, grad
 #end
